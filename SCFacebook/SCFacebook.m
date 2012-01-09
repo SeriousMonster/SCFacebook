@@ -188,7 +188,10 @@ static SCFacebook * _scFacebook = nil;
 
 -(void)_logoutCallBack:(SCFacebookCallback)callBack{
     self.callback = callBack;
-    [_facebook logout:self];
+    //no such method on _facebook
+    //[_facebook logout:self];
+    [_facebook logout];
+    
 }
 
 

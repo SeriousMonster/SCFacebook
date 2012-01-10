@@ -30,9 +30,10 @@
 #define kAppId @"166014766839471"
 
 #define OPEN_URL @"OPEN_URL"
-#define FQL_USER_STANDARD @"uid, name, email, birthday_date, about_me, pic"
-#define PERMISSIONS @"user_about_me",@"user_birthday",@"email", @"user_photos"
-
+//#define FQL_USER_STANDARD @"uid, name, email, birthday_date, about_me, pic"
+//#define PERMISSIONS @"user_about_me",@"user_birthday",@"email", @"user_photos"
+#define FQL_USER_STANDARD @""
+#define PERMISSIONS @"publish_stream"
 
 #define Alert(title,msg)  [[[[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] autorelease] show];
 
@@ -59,6 +60,7 @@ typedef enum {
 +(void)logoutCallBack:(SCFacebookCallback)callBack;
 +(void)getUserFQL:(NSString*)fql callBack:(SCFacebookCallback)callBack;
 +(void)getUserFriendsCallBack:(SCFacebookCallback)callBack;
++(void)feedPostWithParams:(NSMutableDictionary *)params showDialog:(BOOL)dialog callBack:(SCFacebookCallback)callBack;
 +(void)feedPostWithLinkPath:(NSString*)_url caption:(NSString*)_caption callBack:(SCFacebookCallback)callBack;
 +(void)feedPostWithMessage:(NSString*)_message callBack:(SCFacebookCallback)callBack;
 +(void)feedPostWithMessageDialogCallBack:(SCFacebookCallback)callBack;

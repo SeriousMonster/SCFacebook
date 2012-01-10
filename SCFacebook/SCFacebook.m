@@ -219,7 +219,31 @@ static SCFacebook * _scFacebook = nil;
     self.callback = callBack;
 }
 
+-(void)_feedPostWithParams:(NSMutableDictionary *)params showDialog:(BOOL)dialog callBack:(SCFacebookCallback)callBack {
+    if (![_facebook isSessionValid]) {
+        callBack(NO, @"Not logged in");
+        [callBack release];
+        return;
+    }
+    if (params.count == 0) {
+        callBack(NO,@"No parameters passed in");
+        [callBack release];
+        return;
+    }
+    if (![_permissions containsObject:@"publish_stream"]) {
+        callBack(NO,@"Must set PERMISSIONS to allow publish_stream");
+        [callBack release];
+        return;
+    }
+    if(dialog){
+        [_facebook dialog:@"feed" andParams:params andDelegate:self];
+        self.callback = callBack;
+    }else{
+        [_facebook requestWithGraphPath:@"me/feed" andParams:params andHttpMethod:@"POST" andDelegate:self];     
+        self.callback = callBack;
+    }
 
+}
 
 -(void)_feedPostWithLinkPath:(NSString*)_url caption:(NSString*)_caption message:(NSString*)_message photo:(UIImage*)_photo dialog:(BOOL)_dialog callBack:(SCFacebookCallback)callBack{
     
@@ -310,7 +334,9 @@ static SCFacebook * _scFacebook = nil;
 +(void)getUserFriendsCallBack:(SCFacebookCallback)callBack{
 	[[SCFacebook shared] _getUserFriendsCallBack:callBack];
 }
-
++(void)feedPostWithParams:(NSMutableDictionary *)params showDialog:(BOOL)dialog callBack:(SCFacebookCallback)callBack {
+    [[SCFacebook shared] _feedPostWithParams:params showDialog:dialog callBack:callBack];
+}
 +(void)feedPostWithLinkPath:(NSString*)_url caption:(NSString*)_caption callBack:(SCFacebookCallback)callBack{
     [SCFacebook shared].postType = FBPostTypeLink;
     [[SCFacebook shared] _feedPostWithLinkPath:_url caption:_caption message:nil photo:nil dialog:NO callBack:callBack];
